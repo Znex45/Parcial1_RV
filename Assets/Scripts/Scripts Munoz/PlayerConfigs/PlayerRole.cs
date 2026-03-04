@@ -6,5 +6,5 @@ using UnityEngine;
         Strong,     // Fuerte
         Light,      // Salta más alto
         Activator,  // Interactúa mejor
-        Connector   // (lo usamos después)
+        Stabilizer   // (lo usamos después)
     }

@@ -24,6 +24,13 @@ public class PlayerController : MonoBehaviour
     [Header("Interacción Strong")]
     public float pushForce = 15f;
     private Rigidbody objectToPush;
+
+    private ButtonTrigger currentButton;
+
+    [SerializeField] private bool overrideRole = false;
+    [SerializeField] private PlayerRole debugRole;
+
+    private UnstablePlatform currentPlatform;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -54,10 +61,25 @@ public class PlayerController : MonoBehaviour
                 mat.color = Color.green;
                 break;
 
-            case PlayerRole.Connector:
+            case PlayerRole.Stabilizer:
                 mat.color = Color.yellow;
                 break;
         }
+    }
+
+    public void OnInteract(InputValue value)
+    {
+        if (!value.isPressed) return;
+
+        if (role == PlayerRole.Activator && currentButton != null)
+        {
+            currentButton.Activate();
+        }
+    }
+    public void SetRole(PlayerRole newRole)
+    {
+        role = newRole;
+        ApplyRole();
     }
     void OnCollisionEnter(Collision collision)
     {
@@ -70,6 +92,20 @@ public class PlayerController : MonoBehaviour
             collision.gameObject.CompareTag("Pushable"))
         {
             objectToPush = collision.gameObject.GetComponent<Rigidbody>();
+        }
+
+        if (collision.gameObject.CompareTag("Button"))
+        {
+            currentButton = collision.gameObject.GetComponent<ButtonTrigger>();
+        }
+        if (role != PlayerRole.Stabilizer) return;
+
+        UnstablePlatform platform = collision.gameObject.GetComponent<UnstablePlatform>();
+
+        if (platform != null)
+        {
+            currentPlatform = platform;
+            platform.SetStabilized(true);
         }
     }
     void HandlePush()
@@ -88,8 +124,15 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        role = (PlayerRole)(playerCount % 4);
-        playerCount++;
+        if (overrideRole)
+        {
+            role = debugRole;
+        }
+        else
+        {
+            role = (PlayerRole)(playerCount % 4);
+            playerCount++;
+        }
     }
     void FixedUpdate()
     {
@@ -138,5 +181,20 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = false;
         }
+
+        if (collision.gameObject.CompareTag("Button"))
+        {
+            currentButton = null;
+        }
+        if (role != PlayerRole.Stabilizer) return;
+
+        UnstablePlatform platform = collision.gameObject.GetComponent<UnstablePlatform>();
+
+        if (platform != null)
+        {
+            platform.SetStabilized(false);
+            currentPlatform = null;
+        }
+
     }
 }
