@@ -36,6 +36,16 @@ public class ObservationStation : MonoBehaviour
     [Tooltip("Cuantos objetos hay que destruir para ganar (0 = todos).")]
     [Min(0)]  public int   requiredHits = 0;
 
+    [Header("Audio")]
+    [Tooltip("Sonido ambiente que se reproduce en loop mientras la sesion 360 esta activa.")]
+    public AudioClip ambientSound;
+
+    [Tooltip("Sonido que se reproduce en la posicion del asteroide al destruirlo.")]
+    public AudioClip destroySound;
+
+    // AudioSource para el ambiente (componente en este mismo GameObject)
+    AudioSource _ambientSource;
+
     [Header("Proximity")]
     [Tooltip("Distancia maxima al jugador para poder interactuar.")]
     public float interactRadius = 3f;
@@ -107,6 +117,15 @@ public class ObservationStation : MonoBehaviour
 
         _interactAction.performed += OnInteract;
 
+        // Configura AudioSource para el ambiente de la sphere
+        _ambientSource = GetComponent<AudioSource>();
+        if (_ambientSource == null)
+            _ambientSource = gameObject.AddComponent<AudioSource>();
+        _ambientSource.loop         = true;
+        _ambientSource.playOnAwake  = false;
+        _ambientSource.spatialBlend = 0f; // 2D: se escucha igual en todo el espacio
+        _ambientSource.clip         = ambientSound;
+
         // Inicializa la camara 360 con las dependencias necesarias
         view360.Initialize(this, _playerInput);
 
@@ -164,11 +183,21 @@ public class ObservationStation : MonoBehaviour
         // Activa camara 360
         if (playerCamera != null) playerCamera.gameObject.SetActive(false);
         view360.gameObject.SetActive(true);
+
+        // Inicia sonido ambiente
+        if (ambientSound != null)
+        {
+            _ambientSource.clip = ambientSound;
+            _ambientSource.Play();
+        }
     }
 
     void EndSession(bool success)
     {
         _sessionActive = false;
+
+        // Para el sonido ambiente
+        _ambientSource.Stop();
 
         // Restaura controles del jugador
         _moveAction.Enable();
@@ -198,7 +227,17 @@ public class ObservationStation : MonoBehaviour
         if (!_sessionActive || _doorUnlocked) return;
         if (target == null || !target.activeInHierarchy) return;
 
-        target.SetActive(false);    // "destruye" visualmente sin Destroy, permite reintentar
+        // Sonido de destruccion en la posicion del asteroide
+        if (destroySound != null)
+            AudioSource.PlayClipAtPoint(destroySound, target.transform.position);
+
+        // Si tiene el componente Fracture, lo rompe visualmente antes de desactivar
+        Fracture fracture = target.GetComponent<Fracture>();
+        if (fracture != null)
+            fracture.FractureObject();
+        else
+            target.SetActive(false);    // fallback sin fractura, permite reintentar
+
         _hitsLeft--;
 
         if (_hitsLeft <= 0)
