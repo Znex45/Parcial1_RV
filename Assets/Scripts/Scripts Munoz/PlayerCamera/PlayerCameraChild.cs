@@ -5,69 +5,77 @@ public class PlayerCameraChild : MonoBehaviour
 {
     public Transform playerBody;
 
-    public float mouseSensitivity = 0.12f;
-    public float controllerSensitivity = 120f;
+    [Header("Configuración de Input (¡Revisa tu Inspector!)")]
+    [Tooltip("El nombre del Action Map. Ej: 'View' o 'Player'")]
+    public string actionMapName = "View";
+    [Tooltip("El nombre de la Acción. Ej: 'Look' o 'View'")]
+    public string actionName = "Look";
 
+    [Header("Sensibilidad")]
+    public float sensitivity = 120f;
     public float minPitch = -30f;
     public float maxPitch = 60f;
-
     public Vector3 cameraOffset = new Vector3(0f, 1.6f, -3.5f);
-
-    private PlayerControls controls;
-    private Vector2 lookInput;
 
     private float yaw;
     private float pitch;
 
+    private InputActionMap viewMap;
+    private InputAction lookAction;
+
     void Awake()
     {
-        controls = new PlayerControls();
+        // 1. Buscamos el componente PlayerInput en la raíz del jugador
+        PlayerInput pi = GetComponentInParent<PlayerInput>();
 
-        controls.View.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
-        controls.View.Look.canceled += ctx => lookInput = Vector2.zero;
+        if (pi != null)
+        {
+            // 2. Buscamos el Mapa y la Acción EXACTAMENTE como lo hacen tus compañeros.
+            // El 'true' al final hace que Unity te muestre un error rojo en la consola si escribiste mal el nombre.
+            viewMap = pi.actions.FindActionMap(actionMapName, true);
+            lookAction = viewMap.FindAction(actionName, true);
 
-        if (playerBody == null)
-            playerBody = transform.parent;
-    }
+            // 3. Encendemos el mapa entero a la fuerza
+            viewMap.Enable();
+        }
+        else
+        {
+            Debug.LogError("No se encontró el PlayerInput en el objeto padre.");
+        }
 
-    void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    void OnDisable()
-    {
-        controls.Disable();
+        if (playerBody == null) playerBody = transform.parent;
     }
 
     void Start()
     {
-        yaw = playerBody.eulerAngles.y;
+        if (playerBody != null) yaw = playerBody.eulerAngles.y;
         pitch = 10f;
     }
 
     void LateUpdate()
     {
-        if (playerBody == null) return;
+        if (playerBody == null || lookAction == null) return;
 
-        bool usingMouse = Mouse.current != null && Mouse.current.delta.ReadValue() != Vector2.zero;
+        // Leemos el valor del joystick derecho o mouse
+        Vector2 input = lookAction.ReadValue<Vector2>();
 
-        float sensX = usingMouse ? mouseSensitivity : controllerSensitivity * Time.deltaTime;
-        float sensY = usingMouse ? mouseSensitivity : controllerSensitivity * Time.deltaTime;
-
-        yaw += lookInput.x * sensX;
-        pitch -= lookInput.y * sensY;
-
+        yaw += input.x * sensitivity * Time.deltaTime;
+        pitch -= input.y * sensitivity * Time.deltaTime;
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
 
+        // Rotar al jugador horizontalmente
         playerBody.rotation = Quaternion.Euler(0f, yaw, 0f);
 
+        // Posicionar la cámara
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);
-
-        Vector3 desiredPosition = playerBody.position + rotation * cameraOffset;
-
-        transform.position = desiredPosition;
+        transform.position = playerBody.position + (rotation * cameraOffset);
 
         transform.LookAt(playerBody.position + Vector3.up * 1.4f);
+    }
+
+    void OnDestroy()
+    {
+        // Limpiamos la memoria al destruir al jugador
+        if (viewMap != null) viewMap.Disable();
     }
 }

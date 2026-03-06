@@ -187,7 +187,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   speed: 5
   jumpForce: 7
-  rotationSpeed: 12
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -195,7 +194,6 @@ MonoBehaviour:
   playerRenderer: {fileID: 446815694511618858}
   strongForce: 10
   lightJumpBoost: 10
-  pushForce: 5
   cameraTransform: {fileID: 3276767543287668019}
   overrideRole: 0
   debugRole: 0
@@ -350,9 +348,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCameraChild
   playerBody: {fileID: 5751457613654224603}
-  baseOffset: {x: 0, y: 1.6, z: -3.5}
-  lookTargetHeight: 1
-  mouseSensitivity: 2
-  controllerSensitivity: 120
+  actionMapName: View
+  actionName: Look
+  sensitivity: 120
   minPitch: -30
   maxPitch: 60
+  cameraOffset: {x: 0, y: 1.6, z: -3.5}

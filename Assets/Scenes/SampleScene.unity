@@ -432,11 +432,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!4 &410756004 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3276767543287668019, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
-  m_PrefabInstance: {fileID: 774660512}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &774660512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -445,10 +440,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
-      propertyPath: cameraTransform
-      value: 
-      objectReference: {fileID: 410756004}
     - target: {fileID: 2784100277855058221, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: m_Name
       value: Player
@@ -493,10 +484,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6073867571579761205, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 2006952047}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1012,17 +999,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2784100277855058221, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
   m_PrefabInstance: {fileID: 774660512}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2006952047 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
-  m_PrefabInstance: {fileID: 774660512}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2006952036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20061138cdb9b894295993870c3bf9fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
