@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool isGrounded;
 
+    public LayerMask groundLayer;
+
     [Header("Rol")]
     public PlayerRole role;
 
@@ -83,7 +85,7 @@ public class PlayerController : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
             isGrounded = true;
         }
@@ -164,7 +166,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
             isGrounded = true;
         }
@@ -177,7 +179,7 @@ public class PlayerController : MonoBehaviour
             objectToPush = null;
         }
 
-        if (collision.gameObject.CompareTag("Ground"))
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
             isGrounded = false;
         }

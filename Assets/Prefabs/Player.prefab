@@ -192,6 +192,8 @@ MonoBehaviour:
   strongForce: 10
   lightJumpBoost: 10
   pushForce: 5
+  overrideRole: 0
+  debugRole: 0
 --- !u!114 &7016962520923827181
 MonoBehaviour:
   m_ObjectHideFlags: 0
