@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool isGrounded;
 
+    public LayerMask groundLayer;
+
     [Header("Rol")]
     public PlayerRole role;
 
@@ -31,13 +33,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerRole debugRole;
 
     private UnstablePlatform currentPlatform;
+
+    public Transform cameraTransform;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         ApplyRole();
     }
 
-    void ApplyRole()
+        void ApplyRole()
     {
         if (playerRenderer == null)
         {
@@ -83,7 +89,7 @@ public class PlayerController : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
             isGrounded = true;
         }
@@ -142,8 +148,18 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        Vector3 movement = new Vector3(moveInput.x, 0, moveInput.y);
-        Vector3 velocity = movement * speed;
+        Vector3 camForward = cameraTransform.forward;
+        Vector3 camRight = cameraTransform.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 moveDirection = camForward * moveInput.y + camRight * moveInput.x;
+
+        Vector3 velocity = moveDirection * speed;
 
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
     }
@@ -164,7 +180,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
             isGrounded = true;
         }
@@ -177,7 +193,7 @@ public class PlayerController : MonoBehaviour
             objectToPush = null;
         }
 
-        if (collision.gameObject.CompareTag("Ground"))
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
             isGrounded = false;
         }
