@@ -157,8 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 5
   gravity: -9.81
-  jumpHeight: 1.5
-  cameraTransform: {fileID: 8125351479458732620}
+  jumpHeight: 0.2
 --- !u!114 &167943396956356180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,7 +350,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d49dc80b51176c24bb4b91b06bf87c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThirdPersonCamera
-  target: {fileID: 7428666547530497231}
   distance: 4
   sensitivity: 100
   yMin: -30
