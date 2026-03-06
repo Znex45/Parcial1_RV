@@ -9,10 +9,29 @@ public class PlayerCamera : MonoBehaviour
     public float mouseSensitivity = 150f;
     public float controllerSensitivity = 200f;
 
+    private PlayerControls controls;
     private Vector2 lookInput;
 
     float xRotation = 0f;
     float yRotation = 0f;
+
+    void Awake()
+    {
+        controls = new PlayerControls();
+
+        controls.View.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+        controls.View.Look.canceled += ctx => lookInput = Vector2.zero;
+    }
+
+    void OnEnable()
+    {
+        controls.Enable();
+    }
+
+    void OnDisable()
+    {
+        controls.Disable();
+    }
 
     void Start()
     {
@@ -25,10 +44,12 @@ public class PlayerCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        float sensitivity = mouseSensitivity;
+        float sensitivity = Mouse.current != null && Mouse.current.delta.ReadValue() != Vector2.zero
+            ? mouseSensitivity
+            : controllerSensitivity;
 
-        float mouseX = lookInput.x * sensitivity;
-        float mouseY = lookInput.y * sensitivity;
+        float mouseX = lookInput.x * sensitivity * Time.deltaTime;
+        float mouseY = lookInput.y * sensitivity * Time.deltaTime;
 
         yRotation += mouseX;
         xRotation -= mouseY;
@@ -37,11 +58,5 @@ public class PlayerCamera : MonoBehaviour
 
         player.rotation = Quaternion.Euler(0f, yRotation, 0f);
         cameraPivot.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-    }
-
-    public void OnView(InputValue value)
-    {
-        lookInput = value.Get<Vector2>();
-        Debug.Log(lookInput);
     }
 }
