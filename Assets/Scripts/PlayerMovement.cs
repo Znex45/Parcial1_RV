@@ -56,18 +56,25 @@ public class PlayerMovement : MonoBehaviour
         camForward.Normalize();
         camRight.Normalize();
 
-        Vector3 move = camForward * moveInput.y + camRight * moveInput.x;
+        // Movimiento horizontal separado del vertical para evitar wall-sticking
+        Vector3 horizontalMove = camForward * moveInput.y + camRight * moveInput.x;
 
         if (controller.isGrounded && verticalVelocity < 0f)
             verticalVelocity = -2f;
 
+        // Si golpeamos algo por arriba (techo/cornisa), cancelar velocidad ascendente
+        if ((controller.collisionFlags & CollisionFlags.Above) != 0 && verticalVelocity > 0f)
+            verticalVelocity = 0f;
+
         verticalVelocity += gravity * Time.deltaTime;
-        move.y = verticalVelocity;
 
-        if (move.sqrMagnitude > 0.01f)
-            transform.forward = new Vector3(move.x, 0f, move.z);
+        // Rotar personaje solo segun el horizontal
+        if (horizontalMove.sqrMagnitude > 0.01f)
+            transform.forward = horizontalMove;
 
-        controller.Move(move * speed * Time.deltaTime);
+        // Movimiento horizontal (sin Y) * speed  +  vertical independiente
+        Vector3 finalMove = horizontalMove * speed + Vector3.up * verticalVelocity;
+        controller.Move(finalMove * Time.deltaTime);
     }
 
     void OnMove(InputAction.CallbackContext ctx)

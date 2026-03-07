@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -10,6 +10,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool isGrounded;
     public LayerMask groundLayer;
+    [Header("Ground Check")]
+    public float groundCheckRadius = 0.3f;
+    public float groundCheckDistance = 0.15f;
+    [Header("Air Control")]
+    [Range(0f, 1f)] public float airControlFactor = 0.15f;
+    public float wallCheckDistance = 0.15f;  // distancia del cast lateral para detectar pared
 
     [Header("Rol")]
     public PlayerRole role;
@@ -47,8 +53,17 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        CheckGrounded();
         Move();
         HandlePush();
+    }
+
+    void CheckGrounded()
+    {
+        // SphereCast desde el centro del collider hacia abajo — no le afecta rozar paredes laterales
+        Vector3 origin = transform.position + Vector3.up * groundCheckRadius;
+        isGrounded = Physics.SphereCast(origin, groundCheckRadius, Vector3.down,
+                                        out _, groundCheckRadius + groundCheckDistance, groundLayer);
     }
 
     // Recibe el input de movimiento de Unity
@@ -74,11 +89,25 @@ public class PlayerController : MonoBehaviour
     {
         if (cameraTransform == null) return;
         Vector3 camForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
-        Vector3 camRight = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
-        Vector3 velocity = (camForward * moveInput.y + camRight * moveInput.x) * speed;
-        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+        Vector3 camRight   = Vector3.ProjectOnPlane(cameraTransform.right,   Vector3.up).normalized;
+        Vector3 desiredVelocity = (camForward * moveInput.y + camRight * moveInput.x) * speed;
+
+        if (isGrounded)
+        {
+            rb.linearVelocity = new Vector3(desiredVelocity.x, rb.linearVelocity.y, desiredVelocity.z);
+        }
+        else
+        {
+            // Si el desired apunta hacia una pared, eliminar esa componente
+            Vector3 safeDesired = ClipVelocityAgainstWalls(desiredVelocity);
+
+            float newX = Mathf.Lerp(rb.linearVelocity.x, safeDesired.x, airControlFactor);
+            float newZ = Mathf.Lerp(rb.linearVelocity.z, safeDesired.z, airControlFactor);
+            rb.linearVelocity = new Vector3(newX, rb.linearVelocity.y, newZ);
+        }
+
         // SONIDO DE PASOS
-        if (velocity.magnitude > 0.1f && isGrounded)
+        if (desiredVelocity.magnitude > 0.1f && isGrounded)
         {
             if (!audioSource.isPlaying)
             {
@@ -90,10 +119,43 @@ public class PlayerController : MonoBehaviour
         else
         {
             if (audioSource.clip == walkSound)
-            {
                 audioSource.Stop();
+        }
+    }
+
+    /// <summary>
+    /// Devuelve el vector de velocidad deseado sin la componente que choca contra paredes laterales.
+    /// </summary>
+    Vector3 ClipVelocityAgainstWalls(Vector3 velocity)
+    {
+        if (velocity.sqrMagnitude < 0.001f) return velocity;
+
+        Vector3 dir = velocity.normalized;
+        float radius = groundCheckRadius * 0.9f;  // usa un radio ligeramente menor al del cuerpo
+
+        // Cast en la dirección del movimiento horizontal
+        if (Physics.CapsuleCast(
+                transform.position + Vector3.up * radius,
+                transform.position + Vector3.up * (GetComponent<Collider>().bounds.size.y - radius),
+                radius,
+                dir,
+                out RaycastHit hit,
+                wallCheckDistance,
+                groundLayer))
+        {
+            // Normal de la pared hit
+            Vector3 wallNormal = hit.normal;
+            wallNormal.y = 0f;
+            wallNormal.Normalize();
+
+            // Si el input apunta hacia la pared (dot negativo), proyectar sobre el plano de la pared
+            if (Vector3.Dot(dir, -wallNormal) > 0f)
+            {
+                velocity = Vector3.ProjectOnPlane(velocity, wallNormal);
             }
         }
+
+        return velocity;
     }
 
     void HandlePush()
@@ -143,14 +205,12 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (((1 << col.gameObject.layer) & groundLayer) != 0) isGrounded = true;
         if (role == PlayerRole.Strong && col.gameObject.CompareTag("Pushable")) objectToPush = col.gameObject.GetComponent<Rigidbody>();
         if (col.gameObject.CompareTag("Button"))
             currentButton = col.gameObject.GetComponent<ButtonTrigger>();
         if (role == PlayerRole.Stabilizer)
         {
             UnstablePlatform platform = col.gameObject.GetComponent<UnstablePlatform>();
-
             if (platform != null)
             {
                 currentPlatform = platform;
@@ -161,7 +221,6 @@ public class PlayerController : MonoBehaviour
     void OnCollisionExit(Collision col)
     {
         if (col.gameObject.CompareTag("Pushable")) objectToPush = null;
-        if (((1 << col.gameObject.layer) & groundLayer) != 0) isGrounded = false;
         if (col.gameObject.CompareTag("Button"))
             currentButton = null;
         if (role == PlayerRole.Stabilizer)
