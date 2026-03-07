@@ -410,7 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AsteroidOrbit
   sphereCenter: {fileID: 784454693}
   orbitSpeed: 20
-  orbitAxis: {x: 0, y: 0, z: 0}
+  orbitAxis: {x: 0, y: 2, z: 0}
 --- !u!1 &60912381 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: c1c48e1341ea35d4fa172cdb915ed140, type: 3}
@@ -1586,16 +1586,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
+      propertyPath: role
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: speed
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: debugRole
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: jumpForce
-      value: 7
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: jumpSound
@@ -2401,9 +2405,10 @@ GameObject:
   - component: {fileID: 512397482}
   - component: {fileID: 512397481}
   - component: {fileID: 512397483}
+  - component: {fileID: 512397484}
   m_Layer: 0
-  m_Name: Plane (1)
-  m_TagString: Ground
+  m_Name: Lava
+  m_TagString: Lava
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2504,6 +2509,27 @@ AudioReverbZone:
   m_Density: 100
   m_LFReference: 250
   m_RoomLF: 0
+--- !u!65 &512397484
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512397478}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 9.999999, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0.000000044703484, z: -0.0000009536743}
 --- !u!1 &560096538
 GameObject:
   m_ObjectHideFlags: 0
@@ -4291,7 +4317,7 @@ GameObject:
   - component: {fileID: 918278606}
   m_Layer: 6
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Lava
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6545,6 +6571,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: arriba2
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: b34895a5cbeae0246af9c017f7df4b1b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b34895a5cbeae0246af9c017f7df4b1b, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.6903
@@ -6611,6 +6641,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: b34895a5cbeae0246af9c017f7df4b1b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1784394891}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: b34895a5cbeae0246af9c017f7df4b1b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1784394895}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: b34895a5cbeae0246af9c017f7df4b1b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1784394896}
   m_SourcePrefab: {fileID: 100100000, guid: b34895a5cbeae0246af9c017f7df4b1b, type: 3}
 --- !u!4 &1784394883 stripped
 Transform:
@@ -6624,7 +6660,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1150137043}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3802770c8c1081c44bd1d6172dbbfa5e, type: 3}
   m_Name: 
@@ -6732,6 +6768,41 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &1784394895
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150137043}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6227975, y: 3.85862, z: 0.14652929}
+  m_Center: {x: 0.86208487, y: 2, z: 0.00000047683716}
+--- !u!114 &1784394896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150137043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea59c66cd7ab41738c2b5bab682d7b06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlidingDoor
+  openOffset: {x: 4, y: 0, z: 0}
+  slideSpeed: 2
 --- !u!1 &1791997090
 GameObject:
   m_ObjectHideFlags: 0

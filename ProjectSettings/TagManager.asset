@@ -8,6 +8,7 @@ TagManager:
   - Pushable
   - Button
   - Target360
+  - Lava
   layers:
   - Default
   - TransparentFX

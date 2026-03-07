@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     float verticalVelocity;
 
     Transform cameraTransform;
+    Vector3 spawnPosition;
+    Quaternion spawnRotation;
 
     void Awake()
     {
@@ -29,6 +31,21 @@ public class PlayerMovement : MonoBehaviour
 
         // Cada jugador toma SU propia camara (hija)
         cameraTransform = GetComponentInChildren<Camera>().transform;
+    }
+
+    void Start()
+    {
+        spawnPosition = transform.position;
+        spawnRotation = transform.rotation;
+    }
+
+    void Respawn()
+    {
+        // Desactivar el controller para poder mover el transform directamente
+        controller.enabled = false;
+        transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+        verticalVelocity = 0f;
+        controller.enabled = true;
     }
 
     void OnEnable()
