@@ -1086,7 +1086,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 262619990}
   serializedVersion: 5
-  m_Mass: 10
+  m_Mass: 20
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1216,7 +1216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: debugRole
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: jumpForce
@@ -1240,7 +1240,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: overrideRole
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1297886263483778329, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: cameraTransform
@@ -1253,6 +1253,10 @@ PrefabInstance:
     - target: {fileID: 2784100277855058221, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2784100277855058221, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2784100277855058221, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: m_TagString
@@ -1476,6 +1480,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b6fa8b96bafeefb47b926e923a23f108, type: 3}
   m_PrefabInstance: {fileID: 320536769}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &288162073
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288162065}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 0.25, z: 1.9999999}
+  m_Center: {x: 0.0000009536743, y: -0.125, z: 0.0000019073486}
 --- !u!1001 &290522130
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1554,9 +1579,9 @@ GameObject:
   - component: {fileID: 303052924}
   - component: {fileID: 303052923}
   - component: {fileID: 303052922}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1584,7 +1609,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 303052920}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1601,7 +1626,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 32
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!65 &303052923
 BoxCollider:
@@ -1806,6 +1831,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GIRATORIO
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b6fa8b96bafeefb47b926e923a23f108, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b6fa8b96bafeefb47b926e923a23f108, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1813,6 +1846,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b6fa8b96bafeefb47b926e923a23f108, type: 3}
       insertIndex: -1
       addedObject: {fileID: 288162069}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b6fa8b96bafeefb47b926e923a23f108, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 288162073}
   m_SourcePrefab: {fileID: 100100000, guid: b6fa8b96bafeefb47b926e923a23f108, type: 3}
 --- !u!4 &358197717 stripped
 Transform:
@@ -5252,7 +5288,7 @@ GameObject:
   - component: {fileID: 1428880610}
   - component: {fileID: 1428880609}
   - component: {fileID: 1428880608}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5282,7 +5318,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428880606}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 5
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -5299,7 +5335,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 32
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!65 &1428880609
 BoxCollider:
