@@ -18,6 +18,10 @@ public class DoorSimple : MonoBehaviour
 
     [Header("Comportamiento")]
     public bool autoClose = true;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip openSound;
     void Start()
     {
         closedPosition = transform.position;
@@ -65,6 +69,11 @@ public class DoorSimple : MonoBehaviour
         if (isOpening || isClosing) return;
 
         isOpening = true;
+
+        if (audioSource != null && openSound != null)
+        {
+            audioSource.PlayOneShot(openSound);
+        }
     }
 
     IEnumerator CloseAfterDelay()

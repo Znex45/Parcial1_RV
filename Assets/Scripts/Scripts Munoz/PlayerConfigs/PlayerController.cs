@@ -25,6 +25,14 @@ public class PlayerController : MonoBehaviour
     private Rigidbody objectToPush;
     private ButtonTrigger currentButton;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip walkSound;
+    public AudioClip jumpSound;
+
+    private UnstablePlatform currentPlatform;
+
+    private bool isWalking;
     void Awake()
     {
         if (overrideRole) role = debugRole;
@@ -52,7 +60,14 @@ public class PlayerController : MonoBehaviour
     public void OnJump(InputValue value)
     {
         if (value.isPressed && isGrounded)
+        {
+            audioSource.Stop();
+
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+            audioSource.loop = false;
+            audioSource.PlayOneShot(jumpSound);
+        }
     }
 
     void Move()
@@ -62,14 +77,39 @@ public class PlayerController : MonoBehaviour
         Vector3 camRight = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
         Vector3 velocity = (camForward * moveInput.y + camRight * moveInput.x) * speed;
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+        // SONIDO DE PASOS
+        if (velocity.magnitude > 0.1f && isGrounded)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.clip = walkSound;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            if (audioSource.clip == walkSound)
+            {
+                audioSource.Stop();
+            }
+        }
     }
 
     void HandlePush()
     {
-        if (role == PlayerRole.Strong && objectToPush != null)
+        if (role != PlayerRole.Strong) return;
+        if (objectToPush == null) return;
+        if (cameraTransform == null) return;
+
+        Vector3 camForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+        Vector3 camRight = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
+
+        Vector3 pushDir = camForward * moveInput.y + camRight * moveInput.x;
+
+        if (pushDir.magnitude > 0.1f)
         {
-            Vector3 pushDir = new Vector3(moveInput.x, 0, moveInput.y);
-            if (pushDir.magnitude > 0.1f) objectToPush.AddForce(pushDir * strongForce, ForceMode.Acceleration);
+            objectToPush.AddForce(pushDir * strongForce, ForceMode.Impulse);
         }
     }
 
@@ -79,7 +119,15 @@ public class PlayerController : MonoBehaviour
         role = newRole;
         ApplyRole();
     }
+    public void OnInteract(InputValue value)
+    {
+        if (!value.isPressed) return;
 
+        if (role == PlayerRole.Activator && currentButton != null)
+        {
+            currentButton.Activate();
+        }
+    }
     void ApplyRole()
     {
         if (playerRenderer == null) playerRenderer = GetComponent<Renderer>();
@@ -97,10 +145,34 @@ public class PlayerController : MonoBehaviour
     {
         if (((1 << col.gameObject.layer) & groundLayer) != 0) isGrounded = true;
         if (role == PlayerRole.Strong && col.gameObject.CompareTag("Pushable")) objectToPush = col.gameObject.GetComponent<Rigidbody>();
+        if (col.gameObject.CompareTag("Button"))
+            currentButton = col.gameObject.GetComponent<ButtonTrigger>();
+        if (role == PlayerRole.Stabilizer)
+        {
+            UnstablePlatform platform = col.gameObject.GetComponent<UnstablePlatform>();
+
+            if (platform != null)
+            {
+                currentPlatform = platform;
+                platform.SetStabilized(true);
+            }
+        }
     }
     void OnCollisionExit(Collision col)
     {
         if (col.gameObject.CompareTag("Pushable")) objectToPush = null;
         if (((1 << col.gameObject.layer) & groundLayer) != 0) isGrounded = false;
+        if (col.gameObject.CompareTag("Button"))
+            currentButton = null;
+        if (role == PlayerRole.Stabilizer)
+        {
+            UnstablePlatform platform = col.gameObject.GetComponent<UnstablePlatform>();
+
+            if (platform != null)
+            {
+                platform.SetStabilized(false);
+                currentPlatform = null;
+            }
+        }
     }
 }
