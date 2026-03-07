@@ -6129,7 +6129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef375bc9fea4d3abd0d7d0375de1fd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObservationView360
-  sensitivity: 0.2
+  sensitivity: 10
   verticalClamp: 80
   destroyableTag: Target360
   rayDistance: 200
