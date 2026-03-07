@@ -1272,15 +1272,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5751457613654224603, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.233
+      value: -0.68
       objectReference: {fileID: 0}
     - target: {fileID: 5751457613654224603, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.7
+      value: -3.65
       objectReference: {fileID: 0}
     - target: {fileID: 5751457613654224603, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -57.94
+      value: -79
       objectReference: {fileID: 0}
     - target: {fileID: 5751457613654224603, guid: de39c3ddb6909354d992ea09afc415ac, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2858,6 +2858,10 @@ PrefabInstance:
       value: ACTIVABLE2
       objectReference: {fileID: 0}
     - target: {fileID: 70675539169677498, guid: eb5e81dba4c43424c8d4c3b2f6b1147d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 70675539169677498, guid: eb5e81dba4c43424c8d4c3b2f6b1147d, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -3794,6 +3798,14 @@ PrefabInstance:
     - target: {fileID: 70675539169677498, guid: eb5e81dba4c43424c8d4c3b2f6b1147d, type: 3}
       propertyPath: m_Name
       value: Floor_A_01_Prefab (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 70675539169677498, guid: eb5e81dba4c43424c8d4c3b2f6b1147d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 70675539169677498, guid: eb5e81dba4c43424c8d4c3b2f6b1147d, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 842392671266064896, guid: eb5e81dba4c43424c8d4c3b2f6b1147d, type: 3}
       propertyPath: m_LocalScale.x
@@ -5204,10 +5216,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 65740775164874976, guid: f47cd7e4a4ddb1f4983f59adc504c65e, type: 3}
+      propertyPath: m_Size.x
+      value: 1.3197281
+      objectReference: {fileID: 0}
+    - target: {fileID: 65740775164874976, guid: f47cd7e4a4ddb1f4983f59adc504c65e, type: 3}
+      propertyPath: m_Size.z
+      value: 1.35145
+      objectReference: {fileID: 0}
+    - target: {fileID: 65740775164874976, guid: f47cd7e4a4ddb1f4983f59adc504c65e, type: 3}
+      propertyPath: m_Center.x
+      value: 0.16112101
+      objectReference: {fileID: 0}
+    - target: {fileID: 65740775164874976, guid: f47cd7e4a4ddb1f4983f59adc504c65e, type: 3}
+      propertyPath: m_Center.z
+      value: 0.17698193
+      objectReference: {fileID: 0}
+    - target: {fileID: 65740775164874976, guid: f47cd7e4a4ddb1f4983f59adc504c65e, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1643762750520372, guid: f47cd7e4a4ddb1f4983f59adc504c65e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1992046105}
     - targetCorrespondingSourceObject: {fileID: 1617224692275108, guid: f47cd7e4a4ddb1f4983f59adc504c65e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1474254682}
@@ -7410,6 +7445,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5492482151116012571, guid: d4b056a15a8fb8f4a89cb062762a19e1, type: 3}
   m_PrefabInstance: {fileID: 1990682021}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1992046100 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1643762750520372, guid: f47cd7e4a4ddb1f4983f59adc504c65e, type: 3}
+  m_PrefabInstance: {fileID: 1474254680}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1992046105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1992046100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901e22d74ea148b42bd2ef7085da67a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  nextSceneName: Nivel 2
 --- !u!1001 &2017948079
 PrefabInstance:
   m_ObjectHideFlags: 0
